@@ -1,0 +1,27 @@
+service: crud
+
+provider:
+  name: aws
+  runtime: java11
+  memorySize: 1024
+  timeout: 60
+  stage: ${opt:stage,'dev'}
+  region: ${opt:region, 'us-east-1'}
+  profile: ${opt:profile, "default"}
+  endpointType: REGIONAL
+
+resources:
+  Description: This is sample Springboot implementation with AWS Elasticache and serverless framework.
+
+package:
+  individually: true
+
+functions:
+  crud-api:
+    package:
+      artifact: target/aws-springboot-elasticache-1.0.0-SNAPSHOT-lambda-package.zip
+    handler: us.innodea.aws.springboot.crud.StreamLambdaHandler::handleRequest
+    events:
+      - http:
+          path: /{proxy+}
+          method: ANY
