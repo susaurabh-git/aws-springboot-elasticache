@@ -1,5 +1,5 @@
 # aws-springboot-elasticache
-Use AWS Elasticache(Redis) in springboot application 
+This is springboot REST application which will use AWS elasticache to Retrieve, Create, Update and Delete User object.
 
 ## Creating Elasticache instance
 
@@ -54,3 +54,49 @@ We can find elasticache Address and Port inside "Endpoint" details from above co
 
 Elasticache configuration is complete and ready to use.
 
+## Pre-requisites
+- Java 11+
+- Maven 3.6+
+- AWS CLI 2
+- Serverless framework CLI
+
+## Build 
+```shell
+git clone https://github.com/susaurabh-git/aws-springboot-elasticache.git
+cd aws-springboot-elasticache
+mvn clean package
+```
+
+## Deploy
+
+Set REDIS_HOST environment variable to be available for CLI commands
+```shell
+export REDIS_HOST=spring-redis-cluster.xxxxxx.xxxx.xxxx.cache.amazonaws.com
+```
+Serverless deploy
+```shell
+sls deploy
+```
+Grab URL from the output of above command. i.e.: `https://xxxxxx.execute.api.{region}.amazonaws.com/dev/{proxy+}`
+
+## Test the Application
+
+### Create User
+```shell
+curl -L -X POST 'https://xxxxxx.execute.api.{region}.amazonaws.com/dev/users' -H 'Content-Type: application/json'\
+--data-raw '{
+    "firstName":"John",
+    "lastName":"Doe"
+    }'
+```
+
+### Retrieve User
+Get ID from above output
+```shell
+curl -L -X GET 'https://xxxxxx.execute.api.{region}.amazonaws.com/dev/users/{id-from-above-output}'
+```
+
+### Delete User
+```shell
+curl -L -X DELETE 'https://xxxxxx.execute.api.{region}.amazonaws.com/dev/users/{id-from-above-output}'
+```
